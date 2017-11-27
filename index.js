@@ -3,7 +3,9 @@ var mongoose = require('mongoose'),
 extend = require('extend'),
 counterSchema,
 IdentityCounter;
+require('mongoose-long')(mongoose);
 
+var SchemaTypes = mongoose.Schema.Types;
 // Initialize plugin by creating counter collection in database.
 exports.initialize = function (connection) {
   try {
@@ -14,7 +16,7 @@ exports.initialize = function (connection) {
       counterSchema = new mongoose.Schema({
         model: { type: String, require: true },
         field: { type: String, require: true },
-        count: { type: Number, default: 0 }
+        count: { type: SchemaTypes.Long, default: 0 }
       });
 
       // Create a unique index using the "field" and "model" fields.
@@ -62,7 +64,7 @@ exports.plugin = function (schema, options) {
 
   // Add properties for field in schema.
   fields[settings.field] = {
-    type: Number,
+    type: SchemaTypes.Long,
     require: true
   };
   if (settings.field !== '_id')
